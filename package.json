@@ -1,10 +1,13 @@
 {
-  "name": "react-searchable-filter-box",
+  "name": "react-searchable-filter",
   "version": "1.0.0",
   "description": "Searchable React Filter component",
   "author": "ashwinKumar0505",
   "license": "MIT",
-  "repository": "ashwinKumar0505/react-searchable-filter-box",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Codebrahma/React-searchable-filter"
+  },
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.tsx",
