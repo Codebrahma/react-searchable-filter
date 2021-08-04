@@ -8845,7 +8845,7 @@ react-is@^17.0.1:
   version "0.0.0"
   uid ""
 
-"react-searchable-filter-box@link:..":
+"react-searchable-filter@link:..":
   version "0.0.0"
   uid ""
 
