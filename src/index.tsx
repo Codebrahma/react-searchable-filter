@@ -1,10 +1,379 @@
-import * as React from 'react'
-import styles from './styles.module.css'
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-unused-expressions */
+import React, { useState, useRef, useEffect, ReactNode } from 'react'
+import styles from './index.css'
+import { ENTER_KEY, ESCAPE_KEY, UP_ARROW, DOWN_ARROW } from './constants/keys'
+import useOnClickOutside from './hooks/useOnClickOutside'
+import { FilterIcon, CloseIcon } from './icons/icons'
 
-interface Props {
-  text: string
+type TOption = {
+  filterBy: string
+  description?: string
+  values: string[]
 }
 
-export const ExampleComponent = ({ text }: Props) => {
-  return <div className={styles.test}>Example Component: {text}</div>
+type TFilterField = {
+  options: TOption[]
+  onSubmit?: (filters: string[]) => void
+  placeholder?: string
+  className?: string
+  inputClassName?: string
+  dropdownListClassName?: string
+  customFilterIcon?: ReactNode
+  customCrossIcon?: ReactNode
+  optionsListMaxHeight?: number
 }
+
+type TDropdownOptions = {
+  value: string
+  description: string
+}[]
+
+const ReactSearchableFilter: React.FC<TFilterField> = ({
+  options,
+  onSubmit,
+  placeholder = 'Filter',
+  className,
+  inputClassName,
+  dropdownListClassName,
+  customFilterIcon,
+  customCrossIcon,
+  optionsListMaxHeight
+}) => {
+  const [inputValue, setInputValue] = useState('')
+  const [showDropdown, setShowDropdown] = useState(false)
+  const [hoverIndex, setHoverIndex] = useState(-1)
+  const [IsOptionsPositionedTop, setIsOptionsPositionedTop] = useState(false)
+
+  const defaultDropdownOptions = options.map((option) => ({
+    value: option.filterBy + ':',
+    description: option?.description || ''
+  }))
+  const [dropdownOptions, setDropdownOptions] = useState<TDropdownOptions>(
+    defaultDropdownOptions
+  )
+
+  const filterFieldRef = useRef(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+  const optionsContainerRef = useRef<HTMLDivElement | null>(null)
+  const optionRef = useRef<HTMLLIElement>(null)
+
+  const optionsMaxHeight = optionsListMaxHeight || 200
+  let optionsListStyles: React.CSSProperties = {}
+
+  useEffect(() => {
+    const optionsContainerElement: any = optionsContainerRef.current
+
+    const offsetBottom =
+      window.innerHeight -
+      optionsContainerElement?.offsetParent?.getBoundingClientRect().top
+
+    // Position the options container top or bottom based on the space available
+    if (
+      optionsMaxHeight > offsetBottom &&
+      optionsContainerElement?.offsetParent?.getBoundingClientRect().top >
+        offsetBottom
+    ) {
+      setIsOptionsPositionedTop(true)
+    } else {
+      setIsOptionsPositionedTop(false)
+    }
+  }, [showDropdown, optionsMaxHeight])
+
+  if (IsOptionsPositionedTop)
+    optionsListStyles = {
+      bottom: '100%',
+      marginBottom: '5px'
+    }
+  else
+    optionsListStyles = {
+      top: '100%',
+      marginTop: '5px'
+    }
+
+  const splittedInputValues = inputValue.split(' ')
+  const currentFilterValue = splittedInputValues[splittedInputValues.length - 1]
+
+  const selectedFilters =
+    inputValue[inputValue.length - 1] === ':'
+      ? splittedInputValues.slice(0, splittedInputValues.length - 1)
+      : splittedInputValues
+
+  const filteredOptions = dropdownOptions.filter((option) =>
+    option.value.startsWith(currentFilterValue)
+  )
+
+  const updateOptionsAsFilterValues = (filterByValue: string) => {
+    const filteredValuesByKey = options.find(
+      (option) => option.filterBy === filterByValue
+    )?.values
+    if (filteredValuesByKey) {
+      setDropdownOptions(
+        filteredValuesByKey
+          .filter((value) => {
+            // check for redunant filter values
+            return selectedFilters.indexOf(filterByValue + ':' + value) === -1
+          })
+          .map((currentFilterValue) => ({
+            value: filterByValue + ':' + currentFilterValue,
+            description: ''
+          }))
+      )
+    }
+    setHoverIndex(-1)
+  }
+
+  const updateOptionsAsFilterKeys = () => {
+    setDropdownOptions(
+      options.map((option) => ({
+        value: option.filterBy + ':',
+        description: option?.description || ''
+      }))
+    )
+    setHoverIndex(-1)
+  }
+
+  const updateInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const currentInputValue = e.target.value
+    setInputValue(e.target.value)
+
+    const splittedValues = currentInputValue.split(' ')
+    const lastInputValue = splittedValues[splittedValues.length - 1]
+
+    if (lastInputValue.includes(':')) {
+      // Removing the semi colon and splitting the string
+
+      // Picking out the last value
+      const colonIndex = lastInputValue.indexOf(':')
+      updateOptionsAsFilterValues(lastInputValue.slice(0, colonIndex))
+    } else {
+      updateOptionsAsFilterKeys()
+    }
+  }
+
+  const optionSelectHandler = (optionValue: string) => {
+    const lastSpaceCharIndex = inputValue.lastIndexOf(' ')
+    const isFilterKeysAsOptions = optionValue[optionValue.length - 1] === ':'
+    const valueToBeReplaced = isFilterKeysAsOptions
+      ? optionValue
+      : optionValue + ' '
+
+    // Update the options to show either keys or valyes
+    if (isFilterKeysAsOptions) {
+      updateOptionsAsFilterValues(optionValue.replace(':', ''))
+    } else {
+      updateOptionsAsFilterKeys()
+    }
+    // Update only the last word in the search Text
+    if (lastSpaceCharIndex === -1) {
+      setInputValue(valueToBeReplaced)
+    } else {
+      setInputValue(
+        inputValue.slice(0, lastSpaceCharIndex + 1) + valueToBeReplaced
+      )
+    }
+    inputRef.current?.focus()
+  }
+
+  useOnClickOutside(filterFieldRef, () => {
+    setHoverIndex(-1)
+    setShowDropdown(false)
+  })
+
+  const showSelectedFiltersChecker = () => {
+    const isKeysAsoptions = !currentFilterValue.includes(':')
+
+    // If dropdown list shows filter keys, the selected filters will not be shown
+    return selectedFilters.length > 1 && isKeysAsoptions
+  }
+
+  const keyHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const optionsContainerElement: any = optionsContainerRef.current
+    const optionElement: any = optionRef.current
+
+    const optionsCount = dropdownOptions.length
+    switch (e.keyCode) {
+      case UP_ARROW: {
+        if (hoverIndex <= 0) {
+          optionsContainerElement.scrollTop =
+            optionsContainerElement.scrollHeight
+
+          if (hoverIndex === 0 && showSelectedFiltersChecker()) {
+            setHoverIndex(-1)
+          } else setHoverIndex(optionsCount - 1)
+        } else {
+          if (optionElement)
+            optionsContainerElement.scrollTop =
+              optionElement.offsetTop - optionElement.offsetHeight
+          setHoverIndex(hoverIndex - 1)
+        }
+        document.body.style.pointerEvents = 'none'
+
+        break
+      }
+      case DOWN_ARROW: {
+        if (hoverIndex === optionsCount - 1) {
+          optionsContainerElement.scrollTop = 0
+          if (showSelectedFiltersChecker()) {
+            setHoverIndex(-1)
+          } else setHoverIndex(0)
+        } else {
+          if (optionElement)
+            optionsContainerElement.scrollTop =
+              optionElement.offsetTop - optionElement.offsetHeight
+          setHoverIndex(hoverIndex + 1)
+        }
+        document.body.style.pointerEvents = 'none'
+
+        break
+      }
+      case ESCAPE_KEY: {
+        setShowDropdown(false)
+        inputRef?.current?.blur()
+        break
+      }
+      case ENTER_KEY: {
+        if (hoverIndex < 0) {
+          if (!showSelectedFiltersChecker()) return
+          setShowDropdown(false)
+          if (onSubmit)
+            onSubmit(selectedFilters.filter((filter) => filter.length !== 0))
+        } else {
+          const selectedOption = filteredOptions[hoverIndex].value
+          optionSelectHandler(selectedOption)
+        }
+        break
+      }
+      default: {
+        break
+      }
+    }
+  }
+
+  const selectedFiltersClickHandler = () => {
+    setShowDropdown(false)
+    if (onSubmit)
+      onSubmit(selectedFilters.filter((filter) => filter.length !== 0))
+  }
+
+  const clearInputField = () => {
+    setInputValue('')
+    inputRef.current?.focus()
+  }
+
+  const KeyUpHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.keyCode === UP_ARROW || e.keyCode === DOWN_ARROW) {
+      document.body.style.pointerEvents = 'auto'
+    }
+  }
+
+  return (
+    <div
+      className={`${styles.filterFieldContainer} ${className}`}
+      ref={filterFieldRef}
+    >
+      <div className={styles.filterIcon}>
+        {customFilterIcon || <FilterIcon />}
+      </div>
+      <input
+        className={`${styles.filterInputField} ${inputClassName}`}
+        onChange={updateInputValue}
+        value={inputValue}
+        onKeyDown={keyHandler}
+        onClick={() => setShowDropdown(true)}
+        ref={inputRef}
+        placeholder={placeholder}
+        onKeyUp={KeyUpHandler}
+      />
+      <div className={styles.clearIconContainer} onClick={clearInputField}>
+        {customCrossIcon || <CloseIcon className={styles.clearIcon} />}
+      </div>
+      <div
+        className={`${styles.filterOptionsContainer} ${dropdownListClassName}`}
+        style={{
+          visibility: showDropdown ? 'visible' : 'hidden',
+          opacity: showDropdown ? 1 : 0,
+          ...optionsListStyles
+        }}
+      >
+        <div
+          className={styles.optionsList}
+          style={{ maxHeight: showDropdown ? optionsMaxHeight : 0 }}
+          ref={optionsContainerRef}
+        >
+          {filteredOptions.length === 0 ? (
+            <div className={styles.alternateText}>
+              Sorry no related filter available
+            </div>
+          ) : (
+            <div>
+              <div className={styles.filterOptionsHeader}>
+                {showSelectedFiltersChecker() && (
+                  <div
+                    className={
+                      hoverIndex === -1
+                        ? `${styles.selectedFilters} ${styles.hovered}`
+                        : styles.selectedFilters
+                    }
+                    onClick={selectedFiltersClickHandler}
+                  >
+                    <span
+                      style={{
+                        color: hoverIndex === -1 ? 'white' : '#6a737d'
+                      }}
+                    >
+                      {selectedFilters.join(' ')}
+                    </span>
+                    <span
+                      style={{
+                        color: hoverIndex === -1 ? 'white' : '#24292E'
+                      }}
+                    >
+                      - submit
+                    </span>
+                  </div>
+                )}
+                <div className={styles.headerTitle}>Available Filters</div>
+              </div>
+              <ul className={styles.filterOptionsList}>
+                {filteredOptions.map((option, index) => {
+                  return (
+                    <li
+                      className={
+                        hoverIndex === index
+                          ? `${styles.filterOption} ${styles.hovered}`
+                          : styles.filterOption
+                      }
+                      onClick={() => optionSelectHandler(option.value)}
+                      key={option.value}
+                      onMouseEnter={() => setHoverIndex(index)}
+                      ref={index === hoverIndex ? optionRef : null}
+                    >
+                      <span
+                        style={{
+                          color: hoverIndex === index ? 'white' : '#24292E'
+                        }}
+                      >
+                        {option.value}
+                      </span>
+                      <span
+                        className={styles.optionDescription}
+                        style={{
+                          color: hoverIndex === index ? 'white' : '#6a737d'
+                        }}
+                      >
+                        {option.description}
+                      </span>
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default ReactSearchableFilter
