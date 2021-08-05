@@ -17,6 +17,8 @@ type TFilterField = {
   onSubmit?: (filters: string[]) => void
   placeholder?: string
   className?: string
+  style?: React.CSSProperties
+  hoverColor?: string
   inputClassName?: string
   dropdownListClassName?: string
   customFilterIcon?: ReactNode
@@ -38,7 +40,9 @@ const ReactSearchableFilter: React.FC<TFilterField> = ({
   dropdownListClassName,
   customFilterIcon,
   customCrossIcon,
-  optionsListMaxHeight
+  optionsListMaxHeight,
+  style,
+  hoverColor
 }) => {
   const [inputValue, setInputValue] = useState('')
   const [showDropdown, setShowDropdown] = useState(false)
@@ -59,6 +63,8 @@ const ReactSearchableFilter: React.FC<TFilterField> = ({
   const optionRef = useRef<HTMLLIElement>(null)
 
   const optionsMaxHeight = optionsListMaxHeight || 200
+  const optionHoverColor = hoverColor || '#0d66d6'
+
   let optionsListStyles: React.CSSProperties = {}
 
   useEffect(() => {
@@ -271,6 +277,7 @@ const ReactSearchableFilter: React.FC<TFilterField> = ({
     <div
       className={`${styles.filterFieldContainer} ${className}`}
       ref={filterFieldRef}
+      style={style}
     >
       <div className={styles.filterIcon}>
         {customFilterIcon || <FilterIcon />}
@@ -310,12 +317,13 @@ const ReactSearchableFilter: React.FC<TFilterField> = ({
               <div className={styles.filterOptionsHeader}>
                 {showSelectedFiltersChecker() && (
                   <div
-                    className={
-                      hoverIndex === -1
-                        ? `${styles.selectedFilters} ${styles.hovered}`
-                        : styles.selectedFilters
-                    }
+                    className={styles.selectedFilters}
                     onClick={selectedFiltersClickHandler}
+                    style={
+                      hoverIndex === -1
+                        ? { backgroundColor: optionHoverColor }
+                        : {}
+                    }
                   >
                     <span
                       style={{
@@ -339,10 +347,11 @@ const ReactSearchableFilter: React.FC<TFilterField> = ({
                 {filteredOptions.map((option, index) => {
                   return (
                     <li
-                      className={
+                      className={styles.filterOption}
+                      style={
                         hoverIndex === index
-                          ? `${styles.filterOption} ${styles.hovered}`
-                          : styles.filterOption
+                          ? { backgroundColor: optionHoverColor }
+                          : {}
                       }
                       onClick={() => optionSelectHandler(option.value)}
                       key={option.value}

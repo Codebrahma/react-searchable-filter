@@ -10,6 +10,7 @@
   "engines": {
     "node": ">=10"
   },
+
   "scripts": {
     "build": "microbundle-crl --no-compress --format modern,cjs",
     "start": "microbundle-crl watch --no-compress --format modern,cjs",
@@ -20,7 +21,10 @@
     "test:unit": "cross-env CI=1 react-scripts test --env=jsdom",
     "test:watch": "react-scripts test --env=jsdom",
     "predeploy": "cd example && yarn install && yarn run build",
-    "deploy": "gh-pages -d example/build"
+    "deploy": "gh-pages -d example/build",
+    "docz:dev": "docz dev",
+    "docz:build": "docz build",
+    "docz:serve": "docz:build && docz serve"
   },
   "peerDependencies": {
     "react": "^16.0.0"
