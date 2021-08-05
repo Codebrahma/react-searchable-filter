@@ -1,8 +1,8 @@
-# react-searchable-filter-box
+# react-searchable-filter
 
 > Searchable React Filter component
 
-[![NPM](https://img.shields.io/npm/v/react-searchable-filter-box.svg)](https://www.npmjs.com/package/react-searchable-filter-box) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![NPM](https://img.shields.io/npm/v/react-searchable-filter.svg)](https://www.npmjs.com/package/react-searchable-filter) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ## Install
 
@@ -13,15 +13,25 @@ npm install --save react-searchable-filter-box
 ## Usage
 
 ```tsx
-import React, { Component } from 'react'
+import React from 'react'
 
-import MyComponent from 'react-searchable-filter-box'
-import 'react-searchable-filter-box/dist/index.css'
+import Filter from 'react-searchable-filter'
+import 'react-searchable-filter/dist/index.css'
 
-class Example extends Component {
-  render() {
-    return <MyComponent />
-  }
+const App = () => {
+  const data = [
+    {
+      filterBy: 'username',
+      description: 'filter by username',
+      values: ['John', 'Albert', 'Robert']
+    },
+    {
+      filterBy: 'status',
+      values: ['finished', 'not-finished', 'pending'],
+      description: 'filter by status'
+    }
+  ]
+  return <Filter options={data} placeholder='Filter users' />
 }
 ```
 

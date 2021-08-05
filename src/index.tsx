@@ -12,9 +12,11 @@ type TOption = {
   values: string[]
 }
 
+export type onSubmitFiltersType = { filterBy: string; values: string[] }[]
+
 type TFilterField = {
   options: TOption[]
-  onSubmit?: (filters: string[]) => void
+  onSubmit?: (filters: onSubmitFiltersType) => void
   placeholder?: string
   className?: string
   style?: React.CSSProperties
@@ -193,6 +195,33 @@ const ReactSearchableFilter: React.FC<TFilterField> = ({
     return selectedFilters.length > 1 && isKeysAsoptions
   }
 
+  const submitFiltersHandler = () => {
+    setShowDropdown(false)
+
+    if (onSubmit) {
+      const filtersByKeys: { filterBy: string; values: string[] }[] = []
+
+      selectedFilters.forEach((filter) => {
+        const [key, value] = filter.split(':')
+
+        const filterIndex = filtersByKeys.findIndex(
+          (entry) => entry.filterBy === key
+        )
+
+        if (filterIndex !== -1) {
+          filtersByKeys[filterIndex].values.push(value)
+        } else {
+          if (key.length === 0) return
+          filtersByKeys.push({
+            filterBy: key,
+            values: [value]
+          })
+        }
+      })
+      onSubmit(filtersByKeys)
+    }
+  }
+
   const keyHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const optionsContainerElement: any = optionsContainerRef.current
     const optionElement: any = optionRef.current
@@ -241,9 +270,7 @@ const ReactSearchableFilter: React.FC<TFilterField> = ({
       case ENTER_KEY: {
         if (hoverIndex < 0) {
           if (!showSelectedFiltersChecker()) return
-          setShowDropdown(false)
-          if (onSubmit)
-            onSubmit(selectedFilters.filter((filter) => filter.length !== 0))
+          submitFiltersHandler()
         } else {
           const selectedOption = filteredOptions[hoverIndex].value
           optionSelectHandler(selectedOption)
@@ -254,12 +281,6 @@ const ReactSearchableFilter: React.FC<TFilterField> = ({
         break
       }
     }
-  }
-
-  const selectedFiltersClickHandler = () => {
-    setShowDropdown(false)
-    if (onSubmit)
-      onSubmit(selectedFilters.filter((filter) => filter.length !== 0))
   }
 
   const clearInputField = () => {
@@ -318,12 +339,13 @@ const ReactSearchableFilter: React.FC<TFilterField> = ({
                 {showSelectedFiltersChecker() && (
                   <div
                     className={styles.selectedFilters}
-                    onClick={selectedFiltersClickHandler}
+                    onClick={submitFiltersHandler}
                     style={
                       hoverIndex === -1
                         ? { backgroundColor: optionHoverColor }
                         : {}
                     }
+                    onMouseEnter={() => setHoverIndex(-1)}
                   >
                     <span
                       style={{
