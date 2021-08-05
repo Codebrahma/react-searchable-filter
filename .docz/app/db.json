@@ -1,0 +1,87 @@
+{
+  "config": {
+    "title": "React Searchable Filter",
+    "description": "Searchable React Filter component",
+    "menu": [],
+    "version": "1.0.0",
+    "repository": null,
+    "native": false,
+    "themeConfig": {},
+    "separator": "-"
+  },
+  "entries": [
+    {
+      "key": "README.md",
+      "value": {
+        "id": "04c6e90faac2675aa89e2176d2eec7d8",
+        "filepath": "README.md",
+        "fullpath": "/Users/kamesh/Documents/Projects/react-searchable-filter/README.md",
+        "link": "",
+        "hidden": false,
+        "slug": "readme",
+        "route": "/readme",
+        "name": "Readme",
+        "menu": "",
+        "headings": [
+          {
+            "slug": "react-searchable-filter-box",
+            "depth": 1,
+            "value": "react-searchable-filter-box"
+          },
+          {
+            "slug": "install",
+            "depth": 2,
+            "value": "Install"
+          },
+          {
+            "slug": "usage",
+            "depth": 2,
+            "value": "Usage"
+          },
+          {
+            "slug": "license",
+            "depth": 2,
+            "value": "License"
+          }
+        ]
+      }
+    },
+    {
+      "key": "example/README.md",
+      "value": {
+        "id": "20bfc3ff6a860483887b93bf9cf0d135",
+        "filepath": "example/README.md",
+        "fullpath": "/Users/kamesh/Documents/Projects/react-searchable-filter/example/README.md",
+        "link": "",
+        "hidden": false,
+        "slug": "example-readme",
+        "route": "/example-readme",
+        "name": "Readme",
+        "menu": "",
+        "headings": []
+      }
+    },
+    {
+      "key": "src/demo.mdx",
+      "value": {
+        "name": "Button",
+        "route": "/",
+        "id": "cd2a3da1f13d71b95e46a681511419b4",
+        "filepath": "src/demo.mdx",
+        "fullpath": "/Users/kamesh/Documents/Projects/react-searchable-filter/src/demo.mdx",
+        "link": "",
+        "hidden": false,
+        "slug": "src-demo",
+        "menu": "",
+        "headings": [
+          {
+            "slug": "button",
+            "depth": 1,
+            "value": "Button"
+          }
+        ]
+      }
+    }
+  ],
+  "props": []
+}
