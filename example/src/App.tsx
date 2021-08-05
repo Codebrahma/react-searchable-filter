@@ -8,22 +8,11 @@ import CodebrahmaLogo from './images/codebrahma1.png'
 import GithubLogo from './images/github.svg'
 import DocsLogo from './images/docs2.png'
 
-
 const App = () => {
   const filterOptions = [
     {
-      filterBy: 'is',
-      values: ['finished', 'not-finished', 'pending'],
-      description: 'filter by status or discussion type'
-    },
-    {
-      filterBy: 'repo',
-      values: ['menu', 'Input', 'select', 'dropdown'],
-      description: 'filter by repository'
-    },
-    {
-      filterBy: 'author',
-      description: 'filter by notification author',
+      filterBy: 'username',
+      description: 'filter by username',
       values: [
         'John',
         'Albert',
@@ -35,6 +24,16 @@ const App = () => {
         'Monika',
         'Chandler'
       ]
+    },
+    {
+      filterBy: 'age',
+      values: ['20', '22', '30', '35'],
+      description: 'filter by age'
+    },
+    {
+      filterBy: 'status',
+      values: ['finished', 'not-finished', 'pending'],
+      description: 'filter by status'
     }
   ]
   return (
@@ -64,11 +63,11 @@ const App = () => {
         </div>
       </div>
       <div className='container'>
-      <SearchableFilter
-        options={filterOptions}
-        placeholder='Filter Notifications'
-        onSubmit={(data) => console.log(data)}
-      />
+        <SearchableFilter
+          options={filterOptions}
+          placeholder='Filter Notifications'
+          onSubmit={(data) => console.log(data)}
+        />
       </div>
     </div>
   )
