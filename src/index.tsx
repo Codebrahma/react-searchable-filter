@@ -288,11 +288,18 @@ const ReactSearchableFilter: React.FC<TFilterField> = ({
     inputRef.current?.focus()
   }
 
-  const KeyUpHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.keyCode === UP_ARROW || e.keyCode === DOWN_ARROW) {
-      document.body.style.pointerEvents = 'auto'
-    }
-  }
+  useEffect(() => {
+    document.addEventListener('mousemove', () => {
+      if (document.activeElement === inputRef.current) {
+        document.body.style.pointerEvents = 'auto'
+      }
+    })
+    return document.removeEventListener('mousemove', () => {
+      if (document.activeElement === inputRef.current) {
+        document.body.style.pointerEvents = 'auto'
+      }
+    })
+  }, [])
 
   return (
     <div
@@ -311,7 +318,6 @@ const ReactSearchableFilter: React.FC<TFilterField> = ({
         onClick={() => setShowDropdown(true)}
         ref={inputRef}
         placeholder={placeholder}
-        onKeyUp={KeyUpHandler}
       />
       <div className={styles.clearIconContainer} onClick={clearInputField}>
         {customCrossIcon || <CloseIcon className={styles.clearIcon} />}
@@ -377,7 +383,7 @@ const ReactSearchableFilter: React.FC<TFilterField> = ({
                       }
                       onClick={() => optionSelectHandler(option.value)}
                       key={option.value}
-                      onMouseEnter={() => setHoverIndex(index)}
+                      onMouseOver={() => setHoverIndex(index)}
                       ref={index === hoverIndex ? optionRef : null}
                     >
                       <span
