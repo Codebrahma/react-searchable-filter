@@ -2,5 +2,6 @@ export default {
   files: ['docs/**/*.{md,mdx}'],
   dest: './dist-docs',
   public: './docs/public',
-  menu: ['Introduction', 'Getting Started', 'Props', 'Demo']
+  menu: ['Introduction', 'Getting Started', 'Props', 'Demo'],
+  title: 'react-searchable-filter'
 }
