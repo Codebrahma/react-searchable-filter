@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-import SearchableFilter from 'react-searchable-filter'
+import SearchableFilter, { onSubmitFiltersType } from 'react-searchable-filter'
 import 'react-searchable-filter/dist/index.css'
+import ReactJson from 'react-json-view'
 import './app.css'
 
 import CodebrahmaLogo from './images/codebrahma1.png'
@@ -9,10 +10,30 @@ import GithubLogo from './images/github.svg'
 import DocsLogo from './images/docs2.png'
 
 const App = () => {
+  const [selectedFilters, setSelectedFilters] = useState<onSubmitFiltersType>(
+    []
+  )
   const filterOptions = [
     {
-      filterBy: 'username',
-      description: 'filter by username',
+      filterBy: 'is',
+      description: 'filter by status or discussion type',
+      values: [
+        'read',
+        'unread',
+        'done',
+        'commit',
+        'discussion',
+        'team-discussion'
+      ]
+    },
+    {
+      filterBy: 'repo',
+      description: 'filter by Repository',
+      values: ['react-select', 'react-dropdown', 'popover', 'input', 'combobox']
+    },
+    {
+      filterBy: 'author',
+      description: 'filter by author',
       values: [
         'John',
         'Albert',
@@ -26,16 +47,15 @@ const App = () => {
       ]
     },
     {
-      filterBy: 'age',
-      values: ['20', '22', '30', '35'],
-      description: 'filter by age'
-    },
-    {
-      filterBy: 'status',
-      values: ['finished', 'not-finished', 'pending'],
-      description: 'filter by status'
+      filterBy: 'reason',
+      description: 'filter by reason',
+      values: ['assign', 'author', 'comment', 'invitation', 'manual', 'mention']
     }
   ]
+
+  const submitHandler = (filter: onSubmitFiltersType) => {
+    setSelectedFilters(filter)
+  }
   return (
     <div>
       <div className='header'>
@@ -46,7 +66,11 @@ const App = () => {
         />
         <h2 className='title'>React Searchable Filter</h2>
         <div>
-          <a href='https://github.com/Codebrahma/React Searchable Filter'>
+          <a
+            href='https://github.com/Codebrahma/React-searchable-filter'
+            target='_blank'
+            rel='noreferrer'
+          >
             <img
               src={GithubLogo}
               alt='github-logo'
@@ -63,11 +87,31 @@ const App = () => {
         </div>
       </div>
       <div className='container'>
-        <SearchableFilter
-          options={filterOptions}
-          placeholder='Filter Notifications'
-          onSubmit={(data) => console.log(data)}
-        />
+        <div className='filter-outer-container'>
+          <p className='sub-title'>Searchable Filter</p>
+          <SearchableFilter
+            options={filterOptions}
+            placeholder='Filter Notifications'
+            onSubmit={submitHandler}
+            style={{ width: '100%' }}
+            className='filter-field'
+          />
+        </div>
+        <div className='output-container'>
+          <p className='sub-title'>
+            Output{' '}
+            <span style={{ color: '#5F5E6D' }}>
+              (After Filters are Submitted)
+            </span>
+          </p>
+          <div className='json-view-container'>
+            <ReactJson
+              src={selectedFilters}
+              displayObjectSize={false}
+              displayDataTypes={false}
+            />
+          </div>
+        </div>
       </div>
     </div>
   )
