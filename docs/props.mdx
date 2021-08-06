@@ -1,0 +1,157 @@
+---
+name:Props
+route:/Props
+---
+
+import Props from './components/props.js'
+
+# Props
+
+<Props />
+
+## Usage
+
+### Example-1
+
+- Example for the props - options , placeholder.
+
+- options is the required prop to be passed to the Filter component.
+
+```js
+import React, { useState } from 'react'
+import Filter from 'react-searchable-filter'
+import 'react-searchable-filter/dist/index.css'
+
+const App = () => {
+  const options = [
+    {
+      filterBy: 'status',
+      values: ['finished', 'not-finished', 'pending'],
+      description: 'filter by status'
+    },
+    {
+      filterBy: 'age',
+      values: ['30', '25', '18', '22'],
+      description: 'filter by age'
+    },
+    {
+      filterBy: 'username',
+      description: 'filter by username',
+      values: ['John', 'Albert', 'Robert']
+    }
+  ]
+
+  return (
+    <div>
+      <Filter options={options} placeholder='Filter Users' />
+    </div>
+  )
+}
+```
+
+### Example-2
+
+- Example for props - className, style, inputClassName, dropdownListClassName and hoverColor.
+
+```css
+.filter-component {
+  width:'300px'
+  height:'80px'
+}
+
+```
+
+```js
+import React, { useState } from 'react'
+import Filter from 'react-searchable-filter'
+import 'react-searchable-filter/dist/index.css'
+
+import './index.css'
+import options from '../path/where/options/present'
+
+const App = () => {
+  return (
+    <div>
+      <Filter
+        options={options}
+        className='filter-component'
+        inputClassName='filter-field-input'
+        dropdownListClassName='dropdown-list'
+        style={{ margin: '10px' }}
+        hoverColor='teal'
+      />
+    </div>
+  )
+}
+```
+
+### Example-3
+
+- Example for the prop - onSubmit
+
+```js
+import React, { useState } from 'react'
+import Filter, { onSubmitFiltersType } from 'react-searchable-filter'
+import 'react-searchable-filter/dist/index.css'
+
+import options from '../path/where/options/present'
+
+const App = () => {
+  const [selectedFilters, setSelectedFilters] = useState([])
+  const submitHandler = (filters: onSubmitFiltersType) => {
+    setSelectedFilters(filters)
+  }
+
+  return (
+    <div>
+      <Filter options={options} onSubmit={submitHandler} />
+    </div>
+  )
+}
+```
+
+### Example-4
+
+- Example for the props - customFilterIcon, customClearIcon
+
+```js
+import React, { useState } from 'react'
+import Filter from 'react-searchable-filter'
+import 'react-searchable-filter/dist/index.css'
+import { FaFilter } from 'react-icons/fa'
+import { AiFillCloseCircle } from 'react-icons/ai'
+
+import options from '../path/where/options/present'
+
+const App = () => {
+  return (
+    <div>
+      <Filter
+        options={options}
+        customFilterIcon={<FaFilter />}
+        customClearIcon={<AiFillCloseCircle />}
+      />
+    </div>
+  )
+}
+```
+
+### Example-5
+
+- Example for the prop - editable and optionsListMaxHeight
+
+```js
+import React, { useState } from 'react'
+import Filter from 'react-searchable-filter'
+import 'react-searchable-filter/dist/index.css'
+
+import options from '../path/where/options/present'
+
+const App = () => {
+  return (
+    <div>
+      <Filter options={options} editable={false} optionsMaxHeight={300} />
+    </div>
+  )
+}
+```

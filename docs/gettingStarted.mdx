@@ -23,40 +23,40 @@ yarn add react-searchable-filter
 
 ### 1. Define the options
 
-The options for the combo-box are passed as array of objects.
+The options for the filter component are passed as array of objects.
 Each option will have the following properties : filterBy, values and description.
-filterBy property defines how the data should be filtered.
-values property describes the possible values that the filter provides.
-description property the description of each filter.
+filterBy property defines how the data should be filtered,
+values property describes the possible values that the filter provides and
+description property defines the description of each filter.
 
 ```js
 const options = [
-    {
-      filterBy: 'status',
-      values: ['finished', 'not-finished', 'pending'],
-      description: 'filter by status'
-    },
-    {
-      filterBy: 'age',
-      values: ['30', '25', '18', '22'],
-      description: 'filter by age'
-    },
-    {
-      filterBy: 'username',
-      description: 'filter by username',
-      values: [
-        'John',
-        'Albert',
-        'Robert',
-        'Doss',
-        'Marry',
-        'Racheal',
-        'Joe',
-        'Monika',
-        'Chandler'
-      ]
-    }
-  ]
+  {
+    filterBy: 'status',
+    values: ['finished', 'not-finished', 'pending'],
+    description: 'filter by status'
+  },
+  {
+    filterBy: 'age',
+    values: ['30', '25', '18', '22'],
+    description: 'filter by age'
+  },
+  {
+    filterBy: 'username',
+    description: 'filter by username',
+    values: [
+      'John',
+      'Albert',
+      'Robert',
+      'Doss',
+      'Marry',
+      'Racheal',
+      'Joe',
+      'Monika',
+      'Chandler'
+    ]
+  }
+]
 ```
 
 ### 2. Usage
@@ -91,13 +91,13 @@ import 'react-searchable-filter/dist/index.css'
 import options from '../path/where/options/present'
 
 const App = () => {
-  const submitHandler=(filters)=>{
+  const submitHandler = (filters) => {
     console.log(filters)
   }
 
   return (
     <div>
-      <Filter options={options} onSubmit={submitHandler}/>
+      <Filter options={options} onSubmit={submitHandler} />
     </div>
   )
 }
