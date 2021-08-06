@@ -24,8 +24,9 @@ type TFilterField = {
   inputClassName?: string
   dropdownListClassName?: string
   customFilterIcon?: ReactNode
-  customCrossIcon?: ReactNode
+  customClearIcon?: ReactNode
   optionsListMaxHeight?: number
+  editable?: boolean
 }
 
 type TDropdownOptions = {
@@ -41,10 +42,11 @@ const ReactSearchableFilter: React.FC<TFilterField> = ({
   inputClassName,
   dropdownListClassName,
   customFilterIcon,
-  customCrossIcon,
+  customClearIcon,
   optionsListMaxHeight,
   style,
-  hoverColor
+  hoverColor,
+  editable = true
 }) => {
   const [inputValue, setInputValue] = useState('')
   const [showDropdown, setShowDropdown] = useState(false)
@@ -318,9 +320,11 @@ const ReactSearchableFilter: React.FC<TFilterField> = ({
         onClick={() => setShowDropdown(true)}
         ref={inputRef}
         placeholder={placeholder}
+        style={{ cursor: editable ? 'text' : 'default' }}
+        readOnly={!editable}
       />
       <div className={styles.clearIconContainer} onClick={clearInputField}>
-        {customCrossIcon || <CloseIcon className={styles.clearIcon} />}
+        {customClearIcon || <CloseIcon className={styles.clearIcon} />}
       </div>
       <div
         className={`${styles.filterOptionsContainer} ${dropdownListClassName}`}
