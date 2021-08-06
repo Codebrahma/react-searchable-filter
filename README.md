@@ -2,7 +2,7 @@
 
 > Searchable React Filter component
 
-[![NPM](https://img.shields.io/npm/v/react-searchable-filter.svg)](https://www.npmjs.com/package/react-searchable-filter) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)[![Netlify Status](https://api.netlify.com/api/v1/badges/246cf76a-5156-4e4f-bb83-c98de91b581f/deploy-status)](https://app.netlify.com/sites/react-searchable-filter/deploys)
+[![NPM](https://img.shields.io/npm/v/react-searchable-filter.svg)](https://www.npmjs.com/package/react-searchable-filter) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Netlify Status](https://api.netlify.com/api/v1/badges/246cf76a-5156-4e4f-bb83-c98de91b581f/deploy-status)](https://app.netlify.com/sites/react-searchable-filter/deploys)
 
 <img src="./filter-demo.gif" alt="demo" align="middle" />
 
