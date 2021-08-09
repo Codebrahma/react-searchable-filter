@@ -27,6 +27,7 @@ type TFilterField = {
   customClearIcon?: ReactNode
   optionsListMaxHeight?: number
   editable?: boolean
+  onClear?: () => void
 }
 
 type TDropdownOptions = {
@@ -46,7 +47,8 @@ const ReactSearchableFilter: React.FC<TFilterField> = ({
   optionsListMaxHeight,
   style,
   hoverColor,
-  editable = true
+  editable = true,
+  onClear
 }) => {
   const [inputValue, setInputValue] = useState('')
   const [showDropdown, setShowDropdown] = useState(false)
@@ -286,6 +288,7 @@ const ReactSearchableFilter: React.FC<TFilterField> = ({
   }
 
   const clearInputField = () => {
+    if (onClear) onClear()
     setInputValue('')
     inputRef.current?.focus()
   }

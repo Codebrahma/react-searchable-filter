@@ -1,6 +1,6 @@
 {
   "name": "react-searchable-filter",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Searchable React Filter component",
   "author": "ashwinKumar0505",
   "license": "MIT",
@@ -65,6 +65,6 @@
   ],
   "dependencies": {
     "react-json-view": "^1.21.3",
-    "react-searchable-filter": "^1.0.4"
+    "react-searchable-filter": "^1.0.6"
   }
 }

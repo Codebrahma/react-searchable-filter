@@ -95,6 +95,7 @@ const App = () => {
             onSubmit={submitHandler}
             style={{ width: '100%' }}
             className='filter-field'
+            onClear={() => setSelectedFilters([])}
           />
         </div>
         <div className='output-container'>

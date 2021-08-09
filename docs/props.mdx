@@ -87,7 +87,7 @@ const App = () => {
 
 ### Example-3
 
-- Example for the prop - onSubmit
+- Example for the prop - onSubmit and onClear
 
 ```js
 import React, { useState } from 'react'
@@ -102,9 +102,17 @@ const App = () => {
     setSelectedFilters(filters)
   }
 
+  const clearFilters = () => {
+    setSelectedFilters([])
+  }
+
   return (
     <div>
-      <Filter options={options} onSubmit={submitHandler} />
+      <Filter
+        options={options}
+        onSubmit={submitHandler}
+        onClear={clearFilters}
+      />
     </div>
   )
 }

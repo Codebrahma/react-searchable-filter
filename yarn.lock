@@ -14762,6 +14762,14 @@ react-searchable-filter@^1.0.4:
   resolved "https://registry.yarnpkg.com/react-searchable-filter/-/react-searchable-filter-1.0.4.tgz#a096ebb7787529f38e715b4a1b415865cf73e1d4"
   integrity sha512-wEKbnDHdcWB7r59NZhIQ4BKN+4dFwqp6Da8Ku2uirMPyIaTSIDQ52Pd8z3y12mpR+R82VRinytisRyVCjV0omg==
 
+react-searchable-filter@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/react-searchable-filter/-/react-searchable-filter-1.0.6.tgz#25d80a465d1ea2e5fe3ac382656c12d7aa3db37e"
+  integrity sha512-E7bWgKlhxsd/Hdge3h1INeFJqiVTrp35QnqzbvI/QizSnyRp/js+3EcWkgB0Hc0WpmHLhWzjsA83+ju3VtGCsw==
+  dependencies:
+    react-json-view "^1.21.3"
+    react-searchable-filter "^1.0.4"
+
 react-simple-code-editor@^0.11.0:
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/react-simple-code-editor/-/react-simple-code-editor-0.11.0.tgz#bb57c7c29b570f2ab229872599eac184f5bc673c"

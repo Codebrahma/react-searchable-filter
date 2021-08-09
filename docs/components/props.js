@@ -116,6 +116,17 @@ const Props = () => {
               to false.
             </td>
           </tr>
+          <tr>
+            <td>
+              <a href='/docs-props/#example-3'>onClear</a>
+            </td>
+            <td>Function</td>
+            <td />
+            <td>
+              This is callback function which is called when the filters are
+              cleared.
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
