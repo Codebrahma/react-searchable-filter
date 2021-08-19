@@ -368,7 +368,7 @@ const ReactSearchableFilter: React.FC<TFilterField> = ({
                 )}
                 <div className={styles.headerTitle}>Available Filters</div>
               </div>
-              <ul className={styles.filterOptionsList}>
+              <ul className={styles.filterOptionsList} ref={optionsListRef}>
                 {filteredOptions.map((option, index) => {
                   return (
                     <li
