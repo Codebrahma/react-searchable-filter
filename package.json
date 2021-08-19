@@ -1,6 +1,6 @@
 {
   "name": "react-searchable-filter",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "description": "Searchable React Filter component",
   "author": "ashwinKumar0505",
   "license": "MIT",
@@ -26,7 +26,7 @@
     "docz:serve": "docz:build && docz serve"
   },
   "peerDependencies": {
-    "react": "^16.0.0"
+    "react": "^16.0.0",
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^4.2.4",

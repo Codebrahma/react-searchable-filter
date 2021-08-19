@@ -5,6 +5,7 @@ import styles from './index.css'
 import { ENTER_KEY, ESCAPE_KEY, UP_ARROW, DOWN_ARROW } from './constants/keys'
 import useOnClickOutside from './hooks/useOnClickOutside'
 import { FilterIcon, CloseIcon } from './icons/icons'
+import useScroll from './hooks/useScroll'
 
 type TOption = {
   filterBy: string
@@ -65,8 +66,8 @@ const ReactSearchableFilter: React.FC<TFilterField> = ({
 
   const filterFieldRef = useRef(null)
   const inputRef = useRef<HTMLInputElement>(null)
-  const optionsContainerRef = useRef<HTMLDivElement | null>(null)
-  const optionRef = useRef<HTMLLIElement>(null)
+  const dropdownRef = useRef<HTMLDivElement | null>(null)
+  const optionsListRef = useRef<HTMLUListElement>(null)
 
   const optionsMaxHeight = optionsListMaxHeight || 200
   const optionHoverColor = hoverColor || '#0d66d6'
@@ -74,7 +75,7 @@ const ReactSearchableFilter: React.FC<TFilterField> = ({
   let optionsListStyles: React.CSSProperties = {}
 
   useEffect(() => {
-    const optionsContainerElement: any = optionsContainerRef.current
+    const optionsContainerElement: any = dropdownRef.current
 
     const offsetBottom =
       window.innerHeight -
@@ -192,6 +193,8 @@ const ReactSearchableFilter: React.FC<TFilterField> = ({
     setShowDropdown(false)
   })
 
+  useScroll(hoverIndex, dropdownRef, optionsListRef)
+
   const showSelectedFiltersChecker = () => {
     const isKeysAsoptions = !currentFilterValue.includes(':')
 
@@ -227,23 +230,14 @@ const ReactSearchableFilter: React.FC<TFilterField> = ({
   }
 
   const keyHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    const optionsContainerElement: any = optionsContainerRef.current
-    const optionElement: any = optionRef.current
-
     const optionsCount = dropdownOptions.length
     switch (e.keyCode) {
       case UP_ARROW: {
         if (hoverIndex <= 0) {
-          optionsContainerElement.scrollTop =
-            optionsContainerElement.scrollHeight
-
           if (hoverIndex === 0 && showSelectedFiltersChecker()) {
             setHoverIndex(-1)
           } else setHoverIndex(optionsCount - 1)
         } else {
-          if (optionElement)
-            optionsContainerElement.scrollTop =
-              optionElement.offsetTop - optionElement.offsetHeight
           setHoverIndex(hoverIndex - 1)
         }
         document.body.style.pointerEvents = 'none'
@@ -252,14 +246,10 @@ const ReactSearchableFilter: React.FC<TFilterField> = ({
       }
       case DOWN_ARROW: {
         if (hoverIndex === optionsCount - 1) {
-          optionsContainerElement.scrollTop = 0
           if (showSelectedFiltersChecker()) {
             setHoverIndex(-1)
           } else setHoverIndex(0)
         } else {
-          if (optionElement)
-            optionsContainerElement.scrollTop =
-              optionElement.offsetTop - optionElement.offsetHeight
           setHoverIndex(hoverIndex + 1)
         }
         document.body.style.pointerEvents = 'none'
@@ -340,7 +330,7 @@ const ReactSearchableFilter: React.FC<TFilterField> = ({
         <div
           className={styles.optionsList}
           style={{ maxHeight: showDropdown ? optionsMaxHeight : 0 }}
-          ref={optionsContainerRef}
+          ref={dropdownRef}
         >
           {filteredOptions.length === 0 ? (
             <div className={styles.alternateText}>
@@ -391,7 +381,6 @@ const ReactSearchableFilter: React.FC<TFilterField> = ({
                       onClick={() => optionSelectHandler(option.value)}
                       key={option.value}
                       onMouseOver={() => setHoverIndex(index)}
-                      ref={index === hoverIndex ? optionRef : null}
                     >
                       <span
                         style={{
